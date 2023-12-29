@@ -7,8 +7,8 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "EchoNotifier",
-    "version": "0.0.0"
+    "productName": "Echo Notifier",
+    "version": "1.0.0"
   },
   "tauri": {
     "systemTray": {
@@ -48,7 +48,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "echonotifier",
+        "title": "Echo Notifier",
         "width": 800,
         "height": 600
       }

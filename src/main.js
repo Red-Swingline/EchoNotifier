@@ -50,7 +50,7 @@ function customConfirm(message) {
 
 async function addApp() {
     const appName = document.getElementById('newAppName').value;
-    const soundPath = document.getElementById('fullSoundFilePath').value; // Use full path
+    const soundPath = document.getElementById('fullSoundFilePath').value;
 
     if (!appName.trim() || !soundPath) {
         alert('Please enter an app name and select a sound file.');
@@ -73,7 +73,7 @@ function hideAddAppForm() {
     document.getElementById('addAppForm').style.display = 'none';
     document.getElementById('newAppName').value = '';
     document.getElementById('selectedSoundFilePath').innerText = '';
-    document.getElementById('fullSoundFilePath').value = ''; // Reset full path
+    document.getElementById('fullSoundFilePath').value = '';
 }
 
 
@@ -98,14 +98,11 @@ function truncateFilePath(filePath, maxLength = 30) {
     if (!filePath) return '';
     if (filePath.length <= maxLength) return filePath;
 
-    // Split the path and get the last segment (the filename)
     const segments = filePath.split(/[/\\]/);
     const fileName = segments.pop();
 
-    // Start the truncated path with the filename
     let truncatedPath = '.../' + fileName;
 
-    // Rebuild the path from the end until the max length is reached
     for (let i = segments.length - 1; i >= 0; i--) {
         if ((segments[i].length + truncatedPath.length + 1) > maxLength) break;
         truncatedPath = segments[i] + '/' + truncatedPath;
@@ -113,3 +110,7 @@ function truncateFilePath(filePath, maxLength = 30) {
 
     return truncatedPath;
 }
+// This will diable right click and when building a release, inspect will be disabled too.
+window.addEventListener('contextmenu', (event) => {
+event.preventDefault();
+});

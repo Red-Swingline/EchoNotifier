@@ -1,15 +1,15 @@
-use serde::{Deserialize,Serialize};
-use std::fs;
+use serde::{Deserialize, Serialize};
 use std::error::Error;
+use std::fs;
 use std::path::Path;
 
-#[derive(Serialize, Deserialize)] 
+#[derive(Serialize, Deserialize)]
 pub struct AppConfig {
     pub apps: Vec<AppSoundConfig>,
     pub app_settings: AppSettings,
 }
 
-#[derive(Serialize, Deserialize)] 
+#[derive(Serialize, Deserialize)]
 pub struct AppSoundConfig {
     pub app: String,
     pub sound_path: String,
@@ -26,13 +26,20 @@ pub fn read_config(config_path: &str) -> Result<AppConfig, Box<dyn Error>> {
     Ok(config)
 }
 
-pub fn write_config<P: AsRef<Path>>(config: &AppConfig, config_path: P) -> Result<(), Box<dyn Error>> {
+pub fn write_config<P: AsRef<Path>>(
+    config: &AppConfig,
+    config_path: P,
+) -> Result<(), Box<dyn Error>> {
     let config_data = serde_json::to_string_pretty(config)?;
     fs::write(config_path, config_data)?;
     Ok(())
 }
 
-pub fn update_app_sound_path(config: &mut AppConfig, app_name: &str, new_sound_path: &str) -> Result<(), String> {
+pub fn update_app_sound_path(
+    config: &mut AppConfig,
+    app_name: &str,
+    new_sound_path: &str,
+) -> Result<(), String> {
     if let Some(app) = config.apps.iter_mut().find(|a| a.app == app_name) {
         app.sound_path = new_sound_path.to_owned();
         Ok(())

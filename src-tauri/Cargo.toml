@@ -1,10 +1,10 @@
 [package]
 name = "echonotifier"
-version = "0.0.0"
+version = "1.0.0"
 description = "A Tauri App"
-authors = ["you"]
+authors = ["Steve Thacher"]
 license = ""
-repository = ""
+repository = "https://github.com/Red-Swingline/EchoNotifier"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

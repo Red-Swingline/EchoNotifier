@@ -1,13 +1,16 @@
-use dbus::{blocking::Connection, message::{MatchRule, Message}};
-use std::time::{Duration, Instant};
+use crate::config::AppConfig;
 use dbus::arg::ArgType;
+use dbus::{
+    blocking::Connection,
+    message::{MatchRule, Message},
+};
+use log::{error, info};
 use std::collections::HashMap;
-use std::process::Command;
 use std::path::Path;
-use log::{info, error};
+use std::process::Command;
 use std::sync::{mpsc, Arc, Mutex};
 use std::thread;
-use crate::config::AppConfig;
+use std::time::{Duration, Instant};
 
 pub struct NotificationHandler {
     last_notifications: HashMap<String, (String, Instant)>,
@@ -36,7 +39,8 @@ impl NotificationHandler {
         info!("Playing sound for {}: {}", app_name, sound_path);
         self.play_sound(sound_path);
 
-        self.last_notifications.insert(notification_key, (content.to_string(), now));
+        self.last_notifications
+            .insert(notification_key, (content.to_string(), now));
     }
 
     fn play_sound(&self, sound_path: &str) {
@@ -51,16 +55,16 @@ impl NotificationHandler {
                     .arg(sound_path)
                     .output()
                     .expect("Failed to play WAV sound");
-            },
+            }
             "mp3" => {
                 Command::new("mpg321")
                     .arg(sound_path)
                     .output()
                     .expect("Failed to play MP3 sound");
-            },
+            }
             _ => {
                 error!("Unsupported sound format for file: {}", sound_path);
-            },
+            }
         }
     }
 }
@@ -75,14 +79,18 @@ fn get_app_name_from_message(msg: &Message) -> Option<String> {
 }
 
 fn get_notification_content(_msg: &Message) -> String {
-    "notification content".to_string() 
+    "notification content".to_string()
 }
 
 pub fn start_notification_listener(config: AppConfig) {
     let (_tx, rx) = mpsc::channel::<()>();
-    let handler = Arc::new(Mutex::new(NotificationHandler::new(Duration::from_secs(config.app_settings.debounce_period))));
+    let handler = Arc::new(Mutex::new(NotificationHandler::new(Duration::from_secs(
+        config.app_settings.debounce_period,
+    ))));
 
-    let sound_map: HashMap<_, _> = config.apps.into_iter()
+    let sound_map: HashMap<_, _> = config
+        .apps
+        .into_iter()
         .map(|asc| (asc.app, asc.sound_path))
         .collect();
 
@@ -103,10 +111,12 @@ pub fn start_notification_listener(config: AppConfig) {
             }
 
             true
-        }).expect("Failed to add match rule");
+        })
+        .expect("Failed to add match rule");
 
         loop {
-            conn.process(Duration::from_millis(100)).expect("Failed to process D-Bus connection");
+            conn.process(Duration::from_millis(100))
+                .expect("Failed to process D-Bus connection");
             if rx.try_recv().is_ok() {
                 break;
             }
