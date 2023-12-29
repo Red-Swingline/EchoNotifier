@@ -110,7 +110,7 @@ function truncateFilePath(filePath, maxLength = 30) {
 
     return truncatedPath;
 }
-// This will diable right click and when building a release, inspect will be disabled too.
+// This will diable right click
 window.addEventListener('contextmenu', (event) => {
 event.preventDefault();
 });
