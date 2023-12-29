@@ -1,8 +1,8 @@
 body {
-  background-color: #1a1a1a; /* Fallback color */
-  background-image: url('./assets/subtle-prism.svg'); /* Path to your SVG file */
-  background-size: cover; /* Cover the entire background */
-  background-repeat: no-repeat; /* Prevent repeating the background */
+  background-color: #1a1a1a; 
+  background-image: url('./assets/subtle-prism.svg'); /* background by SVGBackgrounds.com */
+  background-size: cover; 
+  background-repeat: no-repeat; 
   background-attachment: fixed;
   color: white;
   font-family: Arial, sans-serif;
@@ -13,17 +13,17 @@ body {
 #app-container {
   display: flex;
   flex-wrap: wrap;
-  flex-direction: column; /* Align children in a single column */
-  align-items: center; /* Center the cards horizontally */
+  flex-direction: column; 
+  align-items: center; 
   gap: 5px;
   justify-content: center;
 }
 
 .app-card {
-  background-color: #333; /* Dark background */
-  color: white; /* Light text */
+  background-color: #333; 
+  color: white; 
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Darker shadow */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); 
   padding: 10px 20px; 
   width: 90%; 
   max-width: 600px; 
@@ -106,17 +106,16 @@ body {
   outline: none; 
 }
 
-/* Style for the add app form card */
 #addAppForm {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  padding: 2vw; /* Use viewport width for responsive padding */
+  padding: 2vw; 
   margin: auto;
-  width: 50vw; /* 50% of the viewport width */
-  max-width: 600px; /* Maximum width to ensure the form doesn't get too large */
-  min-width: 300px; /* Minimum width to ensure the form doesn't get too small */
+  width: 50vw; 
+  max-width: 600px; 
+  min-width: 300px; 
   background-color: #333;
   color: white;
   border-radius: 10px;
@@ -129,18 +128,18 @@ body {
 }
 
 #addAppForm input[type="text"] {
-  width: calc(100% - 4vw); /* Adjust width considering padding */
-  padding: 1vw; /* Responsive padding */
+  width: calc(100% - 4vw);
+  padding: 1vw; 
   margin: 1vw 0;
   border: 1px solid #555;
   background-color: #222;
   color: white;
   border-radius: 5px;
-  font-size: clamp(0.8rem, 1.5vw, 1.2rem); /* Responsive font size with minimum and maximum */
+  font-size: clamp(0.8rem, 1.5vw, 1.2rem); 
 }
 
 #addAppForm button {
-  padding: clamp(8px, 1vw, 16px); /* Responsive padding with minimum and maximum */
+  padding: clamp(8px, 1vw, 16px); 
   margin: 1vw 0;
   border: none;
   border-radius: 5px;
@@ -148,7 +147,7 @@ body {
   color: white;
   cursor: pointer;
   transition: background-color 0.3s;
-  font-size: clamp(0.8rem, 1.5vw, 1.2rem); /* Same as input font size */
+  font-size: clamp(0.8rem, 1.5vw, 1.2rem); 
 }
 
 #addAppForm button:hover {
@@ -158,7 +157,7 @@ body {
 #addAppForm span {
   margin: 1vw 0;
   color: white;
-  font-size: clamp(0.8rem, 1.5vw, 1.2rem); /* Responsive font size */
+  font-size: clamp(0.8rem, 1.5vw, 1.2rem); 
 }
 
 #addAppForm .cancel-button {
