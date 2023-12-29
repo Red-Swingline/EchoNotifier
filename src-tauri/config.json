@@ -1,0 +1,19 @@
+{
+  "apps": [
+    {
+      "app": "notify-send",
+      "sound_path": "/home/steve/Documents/CurrentProjects/notifications/sounds/notification.wav"
+    },
+    {
+      "app": "discord",
+      "sound_path": "/home/steve/Documents/CurrentProjects/notifications/sounds/beep_beep.mp3"
+    },
+    {
+      "app": "Firefox",
+      "sound_path": "/home/steve/Documents/CurrentProjects/notifications/sounds/notification.wav"
+    }
+  ],
+  "app_settings": {
+    "debounce_period": 3
+  }
+}

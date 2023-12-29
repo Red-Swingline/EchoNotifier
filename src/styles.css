@@ -1,0 +1,171 @@
+body {
+  background-color: #1a1a1a; /* Fallback color */
+  background-image: url('./assets/subtle-prism.svg'); /* Path to your SVG file */
+  background-size: cover; /* Cover the entire background */
+  background-repeat: no-repeat; /* Prevent repeating the background */
+  background-attachment: fixed;
+  color: white;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+#app-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column; /* Align children in a single column */
+  align-items: center; /* Center the cards horizontally */
+  gap: 5px;
+  justify-content: center;
+}
+
+.app-card {
+  background-color: #333; /* Dark background */
+  color: white; /* Light text */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Darker shadow */
+  padding: 10px 20px; 
+  width: 90%; 
+  max-width: 600px; 
+  margin: 10px auto; 
+  transition: transform 0.2s; 
+  overflow: hidden; 
+}
+
+.app-card-header {
+  font-size: 1.4em; 
+  margin-bottom: 15px; 
+}
+
+.app-card-body {
+  font-size: 0.9em;
+  line-height: 1.4; 
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+}
+.app-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app-card-actions {
+  display: flex;
+  gap: 10px; 
+}
+
+.edit-button,
+.delete-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.edit-button img,
+.delete-button img {
+  width: 32px; 
+  height: auto;
+  filter: invert(100%); 
+  transition: filter 0.3s, box-shadow 0.3s; 
+}
+
+.edit-button:hover img,
+.delete-button:hover img {
+  filter: invert(50%) sepia(1) saturate(5000%) hue-rotate(260deg) brightness(100%); 
+  box-shadow: 0 0 10px purple;
+}
+
+.edit-button:hover,
+.delete-button:hover {
+  background: none;
+}
+#add-button {
+  position: fixed; 
+  bottom: 20px; 
+  right: 20px; 
+  width: 50px; 
+  height: 50px; 
+  border-radius: 50%; 
+  background-color: #6200ea; 
+  color: white;
+  border: none; 
+  font-size: 30px; 
+  cursor: pointer; 
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2); 
+  outline: none; 
+  transition: background-color 0.3s, box-shadow 0.3s; 
+}
+
+#add-button:hover {
+  background-color: #7b1fa2; 
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3); 
+}
+
+#add-button:focus {
+  outline: none; 
+}
+
+/* Style for the add app form card */
+#addAppForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding: 2vw; /* Use viewport width for responsive padding */
+  margin: auto;
+  width: 50vw; /* 50% of the viewport width */
+  max-width: 600px; /* Maximum width to ensure the form doesn't get too large */
+  min-width: 300px; /* Minimum width to ensure the form doesn't get too small */
+  background-color: #333;
+  color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+#addAppForm input[type="text"] {
+  width: calc(100% - 4vw); /* Adjust width considering padding */
+  padding: 1vw; /* Responsive padding */
+  margin: 1vw 0;
+  border: 1px solid #555;
+  background-color: #222;
+  color: white;
+  border-radius: 5px;
+  font-size: clamp(0.8rem, 1.5vw, 1.2rem); /* Responsive font size with minimum and maximum */
+}
+
+#addAppForm button {
+  padding: clamp(8px, 1vw, 16px); /* Responsive padding with minimum and maximum */
+  margin: 1vw 0;
+  border: none;
+  border-radius: 5px;
+  background-color: #6200ea;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: clamp(0.8rem, 1.5vw, 1.2rem); /* Same as input font size */
+}
+
+#addAppForm button:hover {
+  background-color: #7b1fa2;
+}
+
+#addAppForm span {
+  margin: 1vw 0;
+  color: white;
+  font-size: clamp(0.8rem, 1.5vw, 1.2rem); /* Responsive font size */
+}
+
+#addAppForm .cancel-button {
+  background-color: #d9534f;
+  color: white;
+}
+
+#addAppForm .cancel-button:hover {
+  background-color: #c9302c;
+}
