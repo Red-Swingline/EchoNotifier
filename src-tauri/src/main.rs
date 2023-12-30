@@ -11,7 +11,7 @@ use tauri::{
     CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem,
 };
 
-fn config_path() -> PathBuf {
+pub fn config_path() -> PathBuf {
     home_dir()
         .expect("Could not find home directory")
         .join(".config/echonotifier/config.json")
@@ -98,8 +98,8 @@ fn delete_app(app_name: String) -> Result<(), String> {
 
 fn setup_notification_listener() {
     let config_path = config_path();
-    if let Ok(config) = read_config(&config_path.to_string_lossy()) {
-        start_notification_listener(config);
+    if let Ok(_config) = read_config(&config_path.to_string_lossy()) {
+        start_notification_listener(config_path);
     } else {
         eprintln!("Failed to read or parse config");
     }

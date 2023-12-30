@@ -17,8 +17,6 @@ This application requires:
 
 ## Usage 
 
-**Note:** Any changes to the config.json file will require a restart of the application. This will be fixed in the next release.
-
 If you dont use the .deb file to install then you will need to put the config.json file in `~/.config/echonotifier/config.json` or update the path in line 15 of main.rs.
 ```Rust
 fn config_path() -> PathBuf {
@@ -33,7 +31,7 @@ For esting `notify-send` can be used to see if sounds are working correctly. Her
 - deleting applications
 
 ## TODO
-- [ ] Restart the thread watching dbus after config changes are made.
+- [x] Restart the thread watching dbus after config changes are made.
 - [ ] Clean up application card style. 
 
 ## Screenshots

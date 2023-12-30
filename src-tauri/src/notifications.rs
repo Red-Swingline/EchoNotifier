@@ -1,4 +1,3 @@
-use crate::config::AppConfig;
 use dbus::arg::ArgType;
 use dbus::{
     blocking::Connection,
@@ -6,11 +5,12 @@ use dbus::{
 };
 use log::{error, info};
 use std::collections::HashMap;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::process::Command;
-use std::sync::{mpsc, Arc, Mutex};
+use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::{Duration, Instant};
+use crate::config;
 
 pub struct NotificationHandler {
     last_notifications: HashMap<String, (String, Instant)>,
@@ -81,18 +81,8 @@ fn get_app_name_from_message(msg: &Message) -> Option<String> {
 fn get_notification_content(_msg: &Message) -> String {
     "notification content".to_string()
 }
-
-pub fn start_notification_listener(config: AppConfig) {
-    let (_tx, rx) = mpsc::channel::<()>();
-    let handler = Arc::new(Mutex::new(NotificationHandler::new(Duration::from_secs(
-        config.app_settings.debounce_period,
-    ))));
-
-    let sound_map: HashMap<_, _> = config
-        .apps
-        .into_iter()
-        .map(|asc| (asc.app, asc.sound_path))
-        .collect();
+pub fn start_notification_listener(config_path: PathBuf) {
+    let handler = Arc::new(Mutex::new(NotificationHandler::new(Duration::from_secs(3)))); 
 
     thread::spawn(move || {
         let conn = Connection::new_session().expect("Failed to start D-Bus session");
@@ -101,11 +91,28 @@ pub fn start_notification_listener(config: AppConfig) {
             .with_eavesdrop();
 
         conn.add_match(rule, move |_: (), _, msg: &Message| {
-            let handler = handler.clone();
+            let config = match config::read_config(&config_path.to_string_lossy()) {
+                Ok(cfg) => cfg,
+                Err(err) => {
+                    eprintln!("Failed to read config: {}", err);
+                    return true;
+                }
+            };
+
+            let sound_map: HashMap<_, _> = config
+                .apps
+                .iter()
+                .map(|asc| (asc.app.clone(), asc.sound_path.clone()))
+                .collect();
+
+            let mut handler = handler.lock().unwrap();
+            if handler.debounce_duration != Duration::from_secs(config.app_settings.debounce_period) {
+                handler.debounce_duration = Duration::from_secs(config.app_settings.debounce_period);
+            }
+
             if let Some(app_name) = get_app_name_from_message(msg) {
                 if let Some(sound_path) = sound_map.get(&app_name) {
                     let content = get_notification_content(msg);
-                    let mut handler = handler.lock().unwrap();
                     handler.handle_notification(&app_name, &content, sound_path);
                 }
             }
@@ -117,9 +124,6 @@ pub fn start_notification_listener(config: AppConfig) {
         loop {
             conn.process(Duration::from_millis(100))
                 .expect("Failed to process D-Bus connection");
-            if rx.try_recv().is_ok() {
-                break;
-            }
         }
     });
 }
