@@ -1,3 +1,4 @@
+use crate::config;
 use dbus::arg::ArgType;
 use dbus::{
     blocking::Connection,
@@ -10,7 +11,6 @@ use std::process::Command;
 use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::{Duration, Instant};
-use crate::config;
 
 pub struct NotificationHandler {
     last_notifications: HashMap<String, (String, Instant)>,
@@ -82,7 +82,7 @@ fn get_notification_content(_msg: &Message) -> String {
     "notification content".to_string()
 }
 pub fn start_notification_listener(config_path: PathBuf) {
-    let handler = Arc::new(Mutex::new(NotificationHandler::new(Duration::from_secs(3)))); 
+    let handler = Arc::new(Mutex::new(NotificationHandler::new(Duration::from_secs(3))));
 
     thread::spawn(move || {
         let conn = Connection::new_session().expect("Failed to start D-Bus session");
@@ -106,8 +106,10 @@ pub fn start_notification_listener(config_path: PathBuf) {
                 .collect();
 
             let mut handler = handler.lock().unwrap();
-            if handler.debounce_duration != Duration::from_secs(config.app_settings.debounce_period) {
-                handler.debounce_duration = Duration::from_secs(config.app_settings.debounce_period);
+            if handler.debounce_duration != Duration::from_secs(config.app_settings.debounce_period)
+            {
+                handler.debounce_duration =
+                    Duration::from_secs(config.app_settings.debounce_period);
             }
 
             if let Some(app_name) = get_app_name_from_message(msg) {

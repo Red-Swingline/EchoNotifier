@@ -11,12 +11,6 @@ use tauri::{
     CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem,
 };
 
-pub fn config_path() -> PathBuf {
-    home_dir()
-        .expect("Could not find home directory")
-        .join(".config/echonotifier/config.json")
-}
-
 #[tauri::command]
 fn load_apps() -> Result<String, String> {
     // Read and parse the configuration file
@@ -69,6 +63,7 @@ async fn select_sound_file() -> Result<String, String> {
 
     tauri::api::dialog::FileDialogBuilder::new()
         .add_filter("Audio Files", &["mp3", "wav"])
+        .set_directory(home_dir().unwrap())
         .pick_file(move |path| {
             sender
                 .try_send(path)
@@ -83,6 +78,7 @@ async fn select_sound_file() -> Result<String, String> {
         None => Err("File dialog was closed".into()),
     }
 }
+
 #[tauri::command]
 fn delete_app(app_name: String) -> Result<(), String> {
     let config_path = config_path();
@@ -94,15 +90,6 @@ fn delete_app(app_name: String) -> Result<(), String> {
     config::write_config(&config, &*config_path.to_string_lossy()).map_err(|e| e.to_string())?;
 
     Ok(())
-}
-
-fn setup_notification_listener() {
-    let config_path = config_path();
-    if let Ok(_config) = read_config(&config_path.to_string_lossy()) {
-        start_notification_listener(config_path);
-    } else {
-        eprintln!("Failed to read or parse config");
-    }
 }
 
 #[tauri::command]
@@ -137,6 +124,20 @@ fn add_app(app_name: String, sound_path: String) -> Result<(), String> {
 
     Ok(())
 }
+fn setup_notification_listener() {
+    let config_path = config_path();
+    if let Ok(_config) = read_config(&config_path.to_string_lossy()) {
+        start_notification_listener(config_path);
+    } else {
+        eprintln!("Failed to read or parse config");
+    }
+}
+
+pub fn config_path() -> PathBuf {
+    home_dir()
+        .expect("Could not find home directory")
+        .join(".config/echonotifier/config.json")
+}
 
 #[tokio::main]
 async fn main() {
@@ -149,21 +150,18 @@ async fn main() {
 
     tauri::Builder::default()
         .system_tray(tray)
-        .on_system_tray_event(|app, event| match event {
-            SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
-                "show" => {
-                    if let Some(window) = app.get_window("main") {
-                        window.show().unwrap();
-                        window.set_focus().unwrap();
-                    }
+        .on_system_tray_event(|app, event| if let SystemTrayEvent::MenuItemClick { id, .. } = event { match id.as_str() {
+            "show" => {
+                if let Some(window) = app.get_window("main") {
+                    window.show().unwrap();
+                    window.set_focus().unwrap();
                 }
-                "quit" => {
-                    std::process::exit(0);
-                }
-                _ => {}
-            },
+            }
+            "quit" => {
+                std::process::exit(0);
+            }
             _ => {}
-        })
+        } })
         .setup(|_app| {
             setup_notification_listener();
             Ok(())
@@ -178,16 +176,13 @@ async fn main() {
         ])
         .build(tauri::generate_context!())
         .expect("error while running tauri application")
-        .run(|app_handle, e| match e {
-            tauri::RunEvent::WindowEvent { label, event, .. } => {
-                if label == "main" {
-                    if let tauri::WindowEvent::CloseRequested { api, .. } = event {
-                        api.prevent_close();
-                        let window = app_handle.get_window("main").unwrap();
-                        window.hide().unwrap();
-                    }
+        .run(|app_handle, e| if let tauri::RunEvent::WindowEvent { label, event, .. } = e {
+            if label == "main" {
+                if let tauri::WindowEvent::CloseRequested { api, .. } = event {
+                    api.prevent_close();
+                    let window = app_handle.get_window("main").unwrap();
+                    window.hide().unwrap();
                 }
             }
-            _ => {}
         });
 }
