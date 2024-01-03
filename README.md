@@ -32,7 +32,9 @@ For esting `notify-send` can be used to see if sounds are working correctly. Her
 
 ## TODO
 - [x] Restart the thread watching dbus after config changes are made.
-- [ ] Clean up application card style. 
+- [ ] Clean up application card style.
+- [ ] Add a mute option to the system tray menu
+- [ ] Add dnd schedule
 
 ## Screenshots
 
